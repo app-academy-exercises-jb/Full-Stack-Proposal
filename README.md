@@ -14,7 +14,7 @@
 
 2. Live Chat
 	- Websocket functionality for client communication, with client storage of last known event_ts
-	- Eventual consistency model around messages (see [Atomic Broadcast notes](#atomic-broadcast-guarantees)).
+	- Eventual consistency model around messages (see [Atomic Broadcast notes](#atomic-broadcast-notes)).
 	- [Real-time Messaging Server](#architectural-design)
 	- __BONUS:__ Client side pub/sub: client subscribes to list of users/channels that they are 'interested in', and only receive real-time notifications from those. this reduces the amount of events clients have to handle. examples include: presence updates
   
@@ -46,7 +46,7 @@
 
 8. __BONUS:__ Asynchronous Job Queue
 	- A central server which collects jobs in a queue and dispatches them to its collection of workers, on a first-available basis. The server returns the worker's results to the original caller.
-	- Use case: Async loading of links shared in chat
+	- Use case: Async URL unfurling for links shared in chat
 
 ### <u>Architectural Design:</u>
 
@@ -61,7 +61,7 @@
 1. PostgreSQL database
 2. __BONUS:__ Job Queue for async actions
 
-This isn't much more than an attempt to clone Slack's architecture as presented in reference [1], minute 2:10. 
+This isn't much more than an attempt to clone Slack's architecture as presented in reference [[1]](https://www.infoq.com/presentations/slack-scalability/), minute 2:10. 
 
 ### <u>Architectural Considerations</u>
 
@@ -98,6 +98,6 @@ Strictly satisfying all of these requirements seems to be impossible (see [[2]](
 - Previous experience designing and implementing a WebSocket based messaging and general events server (on NodeJS), which can be found powering the live functionality of this simple, multiplayer-only [game](http://la-pipoette.herokuapp.com/).
 
 ### <u>References:</u>
-- [1] [Bing Wei's (Slack Distributed Systems Team) presentation on Slack's scalability considerations](https://www.infoq.com/presentations/slack-scalability/)
-- [2] [Keith Adam's (Slack Chief Architect) podcast on Slack's messaging architecture](https://softwareengineeringdaily.com/wp-content/uploads/2018/11/SED722-Slack-Architecture-2.0.pdf)
+- [1] [Bing Wei's (on Slack's Distributed Systems Team) presentation on Slack's scalability considerations](https://www.infoq.com/presentations/slack-scalability/)
+- [2] [Keith Adam's (Slack's Chief Architect) podcast on Slack's messaging architecture](https://softwareengineeringdaily.com/wp-content/uploads/2018/11/SED722-Slack-Architecture-2.0.pdf)
 - [3] [Wikipedia Atomic Broadcast](https://en.wikipedia.org/wiki/Atomic_broadcast)
