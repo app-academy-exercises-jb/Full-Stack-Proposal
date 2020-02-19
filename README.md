@@ -98,6 +98,6 @@ Strictly satisfying all of these requirements seems to be impossible (see [[2]](
 - Previous experience designing and implementing a WebSocket based messaging and general events server (on NodeJS), which can be found powering the live functionality of this simple, multiplayer-only [game](http://la-pipoette.herokuapp.com/).
 
 ### <u>References:</u>
-- [1] [Bing Wei's (on Slack's Distributed Systems Team) presentation on Slack's scalability considerations](https://www.infoq.com/presentations/slack-scalability/)
+- [1] [Bing Wei's (on Slack's Infrastructure Team) presentation on Slack's scalability considerations](https://www.infoq.com/presentations/slack-scalability/)
 - [2] [Keith Adam's (Slack's Chief Architect) podcast on Slack's messaging architecture](https://softwareengineeringdaily.com/wp-content/uploads/2018/11/SED722-Slack-Architecture-2.0.pdf)
 - [3] [Wikipedia Atomic Broadcast](https://en.wikipedia.org/wiki/Atomic_broadcast)
