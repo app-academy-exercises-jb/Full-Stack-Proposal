@@ -13,27 +13,23 @@
 	- __BONUS:__ Implement Auth0 login/registration functionality
 
 2. Live Chat
-	- Websocket connection to clients
-	- Strict consistency model around messages (see [Atomic Broadcast notes](#atomic-broadcast-guarantees)). 
-      - Because the non-scaled version of this app is an essentially synchronous system (as there is only one server running and receiving messages), there is no need to agree on order or integrity: it is all determined by the single source of truth which is the singular server.
-      - This means that implementing Atomic Broadcast should be trivial, as opposed to impossible. 
-	- Real-time Messaging Server 
-      - We are trying to copy Slack's way of doing things. As mentioned to in the architectural design [section](#architectural-design), there is a messaging bus which is responsible for real-time communications. 
-      - In a distributed version of this app, the WebApp would be responsible for spawning many Messaging Servers (sharding them, as it were), and distributing those urls to the appropriate users.
-      - The present version of this app will have this bus living on the same server as the WebApp, but at another API endpoint. 
-
+	- Websocket functionality for client communication, with client storage of last known event_ts
+	- Eventual consistency model around messages (see [Atomic Broadcast notes](#atomic-broadcast-guarantees)).
+	- [Real-time Messaging Server](#architectural-design)
+	- __BONUS:__ Client side pub/sub: client subscribes to list of users/channels that they are 'interested in', and only receive real-time notifications from those. this reduces the amount of events clients have to handle. examples include: presence updates
+  
 3. Workspace Functionality
 	- Workspace creation -> Workspace admins
 	- Workspace un/registration
 	- Slack-like styling
+	- Channel/User search
 
 4. Channel Functionality
 	- Channel creation -> Channel admins
 	- Channel un/subscription
 	- Slack-like styling
 	- Typing/presence indicators
-	- Websocket functionality for client communication, with client storage of last known events
-	- __BONUS:__ Client side pub/sub: client subscribes to list of users/channels that they are 'interested in', and only receive real-time notifications from those. this reduces the amount of events clients have to handle. examples include: presence updates
+	- Auto-completing user mentions
 	- __BONUS:__ Lazy Channels: as opposed to loading the full history of a given channel/thread, only load some of it, loading the rest on demand (ie, user scrolling)
 
 5. Direct Messages (p2p, p2group)
@@ -49,9 +45,8 @@
 7. Production Readme
 
 8. __BONUS:__ Asynchronous Job Queue
-	- Async loading of links shared in chat
-
-9. __BONUS:__ Deal with scalability in a distributed computing scenario by approximating a solution to the Atomic Broadcast problem. That is, if we were to have multiple servers running our software, and multiple clients connected to these, we would still expect for there to be a single, stable source of truth. The consistency model we will use will approximate Slack's actual solution, which is called eventual consistency. In essence, this is accomplished by separating 
+	- A central server which collects jobs in a queue and dispatches them to its collection of workers, on a first-available basis. The server returns the worker's results to the original caller.
+	- Use case: Async loading of links shared in chat
 
 ### <u>Architectural Design:</u>
 
@@ -83,20 +78,20 @@ This isn't much more than an attempt to clone Slack's architecture as presented 
 
 3. User communicates with the Messaging Server at the WebSocket url, passing the timestamps provided by the WebApp, which the Messaging Server uses to update the user with the appropriate delta.
 
-**Websocket Events**:
+**Websocket Messages**:
 - Chat messages
 - Typing indicators
 - User presence changes
 - User profile changes
 - Channel creations
 
-### <u>Atomic Broadcast Guarantees:</u>
+### <u>Atomic Broadcast Notes:</u>
 - If a valid user broadcasts a message to the channel, all valid users will eventually receive it
 - If a valid user receives a message, all valid users eventually receive it
 - Uniform integrity of messages: a message is received at most once by each valid users, if it was broadcast
 - Uniform order of messages: all valid users receive all messages in the same order
 
-For more detail please consult reference [3] below. For direct relation to Slack, please check [2].
+Strictly satisfying all of these requirements seems to be impossible (see [[2]](https://softwareengineeringdaily.com/wp-content/uploads/2018/11/SED722-Slack-Architecture-2.0.pdf)). For more detail please consult [[3]](https://en.wikipedia.org/wiki/Atomic_broadcast). 
 
 ### <u>Background:</u>
 
